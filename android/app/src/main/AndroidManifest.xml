@@ -1,0 +1,71 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.joinus">
+
+    <!-- Add the permissions below for to run foreground services to send event to RN -->
+    <!-- Notification -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Location -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!--Geofence-->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
+    <!-- Map -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="com.huawei.appmarket.service.commondata.permission.GET_COMMON_DATA"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+      android:name=".MainApplication"
+      android:label="@string/app_name"
+      android:icon="@mipmap/ic_launcher"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:allowBackup="false"
+      android:theme="@style/AppTheme">
+      <activity
+        android:name=".MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+        android:launchMode="singleTask"
+        android:windowSoftInputMode="adjustResize"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity>
+
+
+      <!-- These are needed to send event to RN part -->
+        <receiver
+            android:name="com.huawei.hms.rn.location.RNLocationBroadcastReceiver"
+            android:exported="false"
+            android:enabled="true">
+        <intent-filter>
+            <action android:name="${applicationId}.ACTION_HMS_LOCATION" />
+            <action android:name="${applicationId}.ACTION_HMS_ACTIVITY_IDENTIFICATION" />
+            <action android:name="${applicationId}.ACTION_HMS_ACTIVITY_CONVERSION" />
+            <action android:name="${applicationId}.ACTION_HMS_GEOFENCE" />
+        </intent-filter>
+        </receiver>
+        <service android:name="com.huawei.hms.rn.location.RNTaskService" />
+          <receiver android:name="com.huawei.hms.rn.push.receiver.HmsLocalNotificationActionsReceiver" 
+            android:exported="true"
+            android:enabled="true"/>
+          <receiver android:name="com.huawei.hms.rn.push.receiver.HmsLocalNotificationBootEventReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+              <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+          </receiver>
+          <receiver android:name="com.huawei.hms.rn.push.receiver.HmsLocalNotificationScheduledPublisher" 
+              android:enabled="true"
+              android:exported="true">
+          </receiver>
+
+    </application>
+</manifest>
